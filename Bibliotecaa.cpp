@@ -40,7 +40,7 @@ void ModificarDatosPersonas();
 int main(){
 string line;
 Persona p;
-int opcion, opcion2;
+int opcion, opcion2, opcion3;
 bool opcionvalida = false;
 
 
@@ -92,6 +92,22 @@ if(search_email == p.Email){
             
             }else if(opcion2 == 3){
                 EliminarDatosPersonas();
+            }
+            }
+            break;
+
+            case 2: {
+            cout<<"Que desea?"<<endl
+            <<"1.- Agregar Libro"<<endl
+            <<"2.- Modificar Libro"<<endl
+            <<"3.- Eliminar Libro"<<endl;
+            cin>>opcion3;
+            if(opcion3 == 1){
+                AgregarDatosLibros();
+            }else if(opcion3 == 2){
+                ModificarDatosLibros();
+            }else if(opcion3 == 3){
+                EliminarDatosLibros();
             }
             }
         }
