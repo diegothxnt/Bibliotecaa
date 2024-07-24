@@ -1,7 +1,9 @@
+
 #include<iostream>
 #include<string>
 #include<fstream>
 #include<sstream>
+#include<limits>
 
 using namespace std;
 
@@ -40,7 +42,7 @@ void ModificarDatosPersonas();
 int main(){
 string line;
 Persona p;
-int opcion, opcion2, opcion3;
+int opcion, opcion2, opcion3,opcion4;
 bool opcionvalida = false;
 
 
@@ -61,8 +63,7 @@ getline(ss,search_email, ',');
 getline(ss,password, ',');
 getline(ss,borrowed_books, ',');
 getline(ss,status,',');
-if(search_email == p.Email){
-    if(password == p.Clave){
+if(search_email == p.Email && password == p.Clave){
         if(status == "admin"){
         cout<<"Bienvenido a la app de la biblioteca, que desea hacer hoy?"<<endl
         <<"1.- Administrar datos de clientes"<<endl
@@ -110,19 +111,34 @@ if(search_email == p.Email){
                 EliminarDatosLibros();
             }
             }
-        }
-        }else{
+            break;
 
+            case 3: {
+
+            }break;
         }
-    }else{
-        cout<<"Clave incorrecta"<<endl;
+        }else if(status == "cliente"){
+        cout<<"Que desea hacer?"<<endl
+        <<"1.- Comprar un libro "<<endl
+        <<"2.- Prestar un libro "<<endl;
+        cin>>opcion4;
+        
+        switch(opcion4){
+
+            case 1: {
+        cout<<"funcion no disponible"<<endl;
+            }break;
+        
+            case 2: {
+        cout<<"funcion no disponible"<<endl;
+            }break;
+        }
+        }
     }
-}else{
-    cout<<"Correo no encontrado"<<endl;
 }
 
 }
-}
+
 void LeerDatosLibros(const string &filename, libros catalog[], int &catalogsize){
     ifstream booksfile(filename);
     string line;
@@ -254,33 +270,38 @@ void ModificarDatosLibros(){
 }
 
 void AgregarDatosPersonas(){
-    ofstream people_file("People.csv", ios::app);
     ifstream people_file2("People.csv");
     string line;
     Persona p;
     int new_id = 0;
 
-    while(getline(people_file2,line)){
+    while(getline(people_file2, line)) {
         new_id++;
     }
-
-    cout<<"Ingrese el nombre de la persona: ";
-    getline(cin,p.Nombre);
-    cout<<"Ingrese el apellido de la persona: ";
-    getline(cin,p.Apellido);
-    cout<<"Ingrese el correo de la persona: ";
-    getline(cin,p.Email);
-    cout<<"Ingrese la clave de la persona: ";
-    getline(cin,p.Clave);
-    cout<<"Ingrese la cantidad de libros prestados: ";
-    cin>>p.libros_prestados;
-    cout<<"Ingrese el status de la persona: ";
-    getline(cin,p.status);
-
-    people_file<<p.id<<","<<p.Nombre<<","<<p.Apellido<<","<<p.Email<<","<<p.Clave<<","<<p.libros_prestados<<","<<p.status<<endl;
-    people_file.close();
     people_file2.close();
+    p.id = new_id;
+    cout << "Ingrese el nombre de la persona: ";
+    cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Corrección aquí
+    getline(cin, p.Nombre);
+    cout << "Ingrese el apellido de la persona: ";
+    getline(cin, p.Apellido);
+    cout << "Ingrese el correo de la persona: ";
+    getline(cin, p.Email);
+    cout << "Ingrese la clave de la persona: ";
+    getline(cin, p.Clave);
+    cout << "Ingrese la cantidad de libros prestados: ";
+    cin >> p.libros_prestados;
+    cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Ignorar el salto de línea después de leer un número
+    cout << "Ingrese el status de la persona: ";
+    getline(cin, p.status);
+
+    ofstream people_file("People.csv", ios::app);
+
+
+    people_file << p.id << "," << p.Nombre << "," << p.Apellido << "," << p.Email << "," << p.Clave << "," << p.libros_prestados << "," << p.status << endl;
+    people_file.close();
 }
+
 
 void EliminarDatosPersonas(){
     Persona p;
