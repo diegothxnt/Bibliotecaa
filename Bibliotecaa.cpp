@@ -242,29 +242,31 @@ void ModificarDatosLibros(){
     libros l;
     cout<<"Ingrese el id del libro que desea modificar: ";
     cin>>l.id;
-
-    ofstream temp("temp.csv");
-    ifstream bookfile("Books.csv");
+    ofstream temp("temp.csv",ios::out);
+    ifstream bookfile("Books.csv",ios::in);
     string line;
 
     while(getline(bookfile,line)){
         int actual_id = atoi(line.substr(0,line.find(',')).c_str());
-        if(actual_id == l.id){
+        if(actual_id != l.id){
+            temp<<line<<endl;
+        }
+        else{
             cout<<"Ingrese el titulo del libro: ";
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
             getline(cin,l.titulo);
             cout<<"Ingrese el nombre del autor: ";
             getline(cin,l.autor);
             cout<<"Ingrese el genero: ";
             getline(cin,l.genero);
-            cout<<"Ingrese la fecha de publicacion del libro";
+            cout<<"Ingrese la fecha de publicacion del libro: ";
             getline(cin,l.fecha_publicacion);
             cout<<"Ingrese la editorial: ";
             getline(cin,l.editorial);
             cout<<"Ingrese el precio del libro: ";
             cin>>l.precio;
-        }
-        else{
-            temp<<line<<endl;
+
+            temp<<l.id<<','<<l.titulo<<','<<l.autor<<','<<l.genero<<','<<l.fecha_publicacion<<','<<l.editorial<<','<<l.precio<<endl;
         }
     }
     bookfile.close();
