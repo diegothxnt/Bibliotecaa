@@ -40,6 +40,7 @@ void EliminarDatosPersonas();
 void ModificarDatosPersonas();
 
 void RegistroNuevoUsuario();
+void SuspenderUsuario();
 
 int main(){
 string line;
@@ -71,10 +72,11 @@ if(search_email == p.Email && password == p.Clave){
         cout<<"Bienvenido a la app de la biblioteca, que desea hacer hoy?"<<endl
         <<"1.- Administrar datos de clientes"<<endl
         <<"2.- Administrar datos de libros"<<endl
-        <<"3.- Comprar o retirar libros"<<endl;
+        <<"3.- Comprar o retirar libros"<<endl
+        <<"4.- Suspender un usuario"<<endl;
         cin>>opcion;
 
-        if(opcion>=1 && opcion<=3){
+        if(opcion>=1 && opcion<=4){
             opcionvalida = true;
         }else{
             cout<<"Opcion invalida, por favor ingrese una dentro del rango"<<endl;
@@ -119,6 +121,9 @@ if(search_email == p.Email && password == p.Clave){
             case 3: {
 
             }break;
+            case 4:{
+
+            }
         }
         }else if(status == "cliente"){
         cout<<"Que desea hacer?"<<endl
