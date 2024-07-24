@@ -12,7 +12,7 @@ struct Persona{
     string Email;
     string Clave;
     int libros_prestados;
-    int status;
+    string status;
 };
 
 struct libros{
@@ -28,6 +28,14 @@ struct libros{
 
 void LeerDatosLibros(const string &filename, libros catalog[], int &catalogsize);
 void LeerDatosPersonas(const string &filename, Persona catalog[], int &catalogsize);
+
+void AgregarDatosLibros();
+void EliminarDatosLibros();
+void ModificarDatosLibros();
+
+void AgregarDatosPersonas();
+void EliminarDatosPersonas();
+void ModificarDatosPersonas();
 
 int main(){
 int status = 0;
@@ -54,11 +62,11 @@ void LeerDatosLibros(const string &filename, libros catalog[], int &catalogsize)
 
         ss>> catalog[catalogsize].id;
         ss.ignore();
-        getline(ss, catalog[catalogsize].titulo,';');
-        getline(ss, catalog[catalogsize].autor,';');
-        getline(ss, catalog[catalogsize].genero,';');
-        getline(ss, catalog[catalogsize].fecha_publicacion,';');
-        getline(ss, catalog[catalogsize].editorial,';');
+        getline(ss, catalog[catalogsize].titulo,',');
+        getline(ss, catalog[catalogsize].autor,',');
+        getline(ss, catalog[catalogsize].genero,',');
+        getline(ss, catalog[catalogsize].fecha_publicacion,',');
+        getline(ss, catalog[catalogsize].editorial,',');
         ss >> catalog[catalogsize].precio;
         ss.ignore();
 
@@ -77,15 +85,127 @@ void LeerDatosPersonas(const string &filename, Persona catalog[], int &catalogsi
 
         ss>> catalog[catalogsize].id;
         ss.ignore();
-        getline(ss, catalog[catalogsize].Nombre,';');
-        getline(ss, catalog[catalogsize].Apellido,';');
-        getline(ss, catalog[catalogsize].Email,';');
-        getline(ss, catalog[catalogsize].Clave,';');
+        getline(ss, catalog[catalogsize].Nombre,',');
+        getline(ss, catalog[catalogsize].Apellido,',');
+        getline(ss, catalog[catalogsize].Email,',');
+        getline(ss, catalog[catalogsize].Clave,',');
         ss >> catalog[catalogsize].libros_prestados;
         ss.ignore();
-        ss >> catalog[catalogsize].status;
-        ss.ignore();
+        getline(ss, catalog[catalogsize].status,',');
 
         catalogsize++;
     }
+}
+void AgregarDatosLibros(){
+    ofstream bookfile("Books.csv" , ios::app);
+    ifstream bookfile2("Books.csv");
+    string line;
+    libros l;
+    int new_id = 0;
+
+    while(getline(bookfile2,line)){
+        new_id++;
+    }
+    cout<<"Ingrese el titulo: ";
+    getline(cin,l.titulo);
+    cout<<"Ingrese el nombre del autor: ";
+    getline(cin,l.autor);
+    cout<<"Ingrese el genero: ";
+    getline(cin,l.genero);
+    cout<<"Ingrese la fecha de publicacion: ";
+    getline(cin,l.fecha_publicacion);
+    cout<<"Ingrese la editorial: ";
+    getline(cin,l.editorial);
+    cout<<"Ingrese el precio del libro: ";
+    cin>>l.precio;
+
+    bookfile<<l.id<<","<<l.titulo<<","<<l.autor<<","<<l.genero<<","<<l.fecha_publicacion<<","<<l.editorial<<","<<l.precio<<endl;
+    bookfile.close();
+    bookfile2.close();
+}
+void EliminarDatosLibros(){
+    libros l;
+    cout<<"Ingrese el id para saber que libro desea eliminar: ";
+    cin>>l.id;
+    ofstream temp("temp.csv");
+    ifstream bookfile("Books.csv");
+    string line;
+
+    while(getline(bookfile,line)){
+        int actual_id = atoi(line.substr(0,line.find(';')).c_str());
+        if(actual_id != l.id){
+            temp<<line<<endl;
+        }
+    }
+    bookfile.close();
+    temp.close();
+
+    remove("Books.csv");
+    rename("temp.csv", "Books.csv");
+    cout<<"los datos fueron borrados exitosamente"<<endl;
+}
+void ModificarDatosLibros(){
+    libros l;
+    cout<<"Ingrese el id del libro que desea modificar: ";
+    cin>>l.id;
+
+    ofstream temp("temp.csv");
+    ifstream bookfile("Books.csv");
+    string line;
+
+    while(getline(bookfile,line)){
+        int actual_id = atoi(line.substr(0,line.find(',')).c_str());
+        if(actual_id == l.id){
+            cout<<"Ingrese el titulo del libro: ";
+            getline(cin,l.titulo);
+            cout<<"Ingrese el nombre del autor: ";
+            getline(cin,l.autor);
+            cout<<"Ingrese el genero: ";
+            getline(cin,l.genero);
+            cout<<"Ingrese la fecha de publicacion del libro";
+            getline(cin,l.fecha_publicacion);
+            cout<<"Ingrese la editorial: ";
+            getline(cin,l.editorial);
+            cout<<"Ingrese el precio del libro: ";
+            cin>>l.precio;
+        }
+        else{
+            temp<<line<<endl;
+        }
+    }
+    bookfile.close();
+    temp.close();
+
+    remove("Books.csv");
+    rename("temp.csv","Books.csv");
+    cout<<"Los datos se modificaron correctamente"<<endl;
+}
+
+void AgregarDatosPersonas(){
+    ofstream people_file("People.csv", ios::app);
+    ifstream people_file2("People.csv");
+    string line;
+    Persona p;
+    int new_id = 0;
+
+    while(getline(people_file2,line)){
+        new_id++;
+    }
+
+    cout<<"Ingrese el nombre de la persona: ";
+    getline(cin,p.Nombre);
+    cout<<"Ingrese el apellido de la persona: ";
+    getline(cin,p.Apellido);
+    cout<<"Ingrese el correo de la persona: ";
+    getline(cin,p.Email);
+    cout<<"Ingrese la clave de la persona: ";
+    getline(cin,p.Clave);
+    cout<<"Ingrese la cantidad de libros prestados: ";
+    cin>>p.libros_prestados;
+    cout<<"Ingrese el status de la persona: ";
+    getline(cin,p.status);
+
+    people_file<<p.id<<","<<p.Nombre<<","<<p.Apellido<<","<<p.Email<<","<<p.Clave<<","<<p.libros_prestados<<","<<p.status<<endl;
+    people_file.close();
+    people_file2.close();
 }
