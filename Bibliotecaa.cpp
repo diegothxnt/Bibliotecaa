@@ -13,8 +13,9 @@ struct Persona{
     string Apellido;
     string Email;
     string Clave;
-    int libros_prestados;
+    int id_libros_prestados;
     string status;
+    int id_libros_comprados;
 };
 
 struct libros{
@@ -284,16 +285,18 @@ void AgregarDatosPersonas(){
     getline(cin, p.Email);
     cout << "Ingrese la clave de la persona: ";
     getline(cin, p.Clave);
-    cout << "Ingrese la cantidad de libros prestados: ";
-    cin >> p.libros_prestados;
+    cout << "Ingrese ids de libros prestados: ";
+    cin >> p.id_libros_prestados;
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
     cout << "Ingrese el status de la persona: ";
     getline(cin, p.status);
+    cout<<"Ingrese ids de libros comprados: ";
+    cin>>p.id_libros_comprados;
 
     ofstream people_file("Clients.csv", ios::app);
 
 
-    people_file << p.id << "," << p.Nombre << "," << p.Apellido << "," << p.Email << "," << p.Clave << "," << p.libros_prestados << "," << p.status << endl;
+    people_file << p.id << "," << p.Nombre << "," << p.Apellido << "," << p.Email << "," << p.Clave << "," << p.id_libros_prestados << "," << p.status <<","<<p.id_libros_comprados<< endl;
     people_file.close();
 }
 
@@ -344,12 +347,13 @@ void ModificarDatosPersonas(){
             cout<<"Ingrese la clave de la persona: ";
             getline(cin,p.Clave);
             cout<<"Ingrese la cantidad de libros prestados de la persona: ";
-            cin>>p.libros_prestados;
+            cin>>p.id_libros_prestados;
             cout<<"Ingrese el status de la persona: ";
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
             getline(cin,p.status);
-
-            temp<<p.id<<','<<p.Nombre<<','<<p.Apellido<<','<<p.Email<<','<<p.Clave<<','<<p.libros_prestados<<','<<p.status<<endl;
+            cout<<"Ingrese ids de libros comprados: ";
+            cin>>p.id_libros_comprados;
+            temp<<p.id<<','<<p.Nombre<<','<<p.Apellido<<','<<p.Email<<','<<p.Clave<<','<<p.id_libros_prestados<<','<<p.status<<","<<p.id_libros_comprados<<endl;
         }
     }
     people_file.close();
@@ -384,7 +388,7 @@ void RegistroNuevoUsuario(){
     ofstream people_file("Clients.csv", ios::app);
 
 
-    people_file << p.id << "," << p.Nombre << "," << p.Apellido << "," << p.Email << "," << p.Clave << "," << "0" << "," << "cliente" << endl;
+    people_file << p.id << "," << p.Nombre << "," << p.Apellido << "," << p.Email << "," << p.Clave << "," << "0" << "," << "cliente" << "," << "0" <<endl;
     people_file.close();
     cout<<"Usuario registrado, inicie sesion"<<endl;
 }
@@ -411,7 +415,7 @@ void SuspenderUsuario() {
                 if (status == "admin") {
                     es_admin = true;
                     cout << "No se puede suspender a un administrador." << endl;
-                    temp << line << endl; // Mantener la línea sin cambios
+                    temp << line << endl; 
                 } else {
                     string updatedLine = line.substr(0, lastDelimiterPos) + ",suspendido";
                     temp << updatedLine << endl;
@@ -427,7 +431,7 @@ void SuspenderUsuario() {
         if (encontrado && !es_admin) {
             remove("Clients.csv");
             rename("temp.csv", "Clients.csv");
-            break; // Salir del bucle si se suspendió correctamente
+            break; 
         } else {
             remove("temp.csv");
             if (!encontrado) {
