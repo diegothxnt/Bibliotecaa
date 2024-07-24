@@ -122,7 +122,7 @@ if(search_email == p.Email && password == p.Clave){
 
             }break;
             case 4:{
-
+            SuspenderUsuario();
             }
         }
         }else if(status == "cliente"){
@@ -421,4 +421,30 @@ void RegistroNuevoUsuario(){
     people_file << p.id << "," << p.Nombre << "," << p.Apellido << "," << p.Email << "," << p.Clave << "," << "0" << "," << "cliente" << endl;
     people_file.close();
     cout<<"Usuario registrado, inicie sesion"<<endl;
+}
+void SuspenderUsuario() {
+    Persona p;
+    cout << "Ingrese el id de la persona que desea suspender: ";
+    cin >> p.id;
+
+    ofstream temp("temp.csv");
+    ifstream archivo_clientes("Clients.csv");
+    string line;
+
+    while (getline(archivo_clientes, line)) {
+        int id_actual = atoi(line.substr(0, line.find(',')).c_str());
+        if (id_actual == p.id) {
+            size_t lastDelimiterPos = line.find_last_of(',');
+            string updatedLine = line.substr(0, lastDelimiterPos) + ",suspendido";
+            temp << updatedLine << endl;
+        } else {
+            temp << line << endl;
+        }
+    }
+    archivo_clientes.close();
+    temp.close();
+
+    remove("Clients.csv");
+    rename("temp.csv", "Clients.csv");
+    cout << "Cliente suspendido" << endl;
 }
